@@ -1,34 +1,26 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Mi Bot MVP</title>
-</head>
-<body>
-  <h1>Hola 👋</h1>
-  <p>¿Cuál es tu nombre?</p>
-  <input id="nombre" type="text" placeholder="Escribe tu nombre aquí">
-  <button onclick="enviarNombre()">Enviar</button>
+<script>
+  async function enviarNombre() {
+    const nombre = document.getElementById("nombre").value;
+    if (!nombre) return alert("Por favor escribe tu nombre");
 
-  <script>
-    async function enviarNombre() {
-      const nombre = document.getElementById("nombre").value;
-      if (!nombre) return alert("Por favor escribe tu nombre");
+    const url = "https://script.google.com/macros/s/AKfycbzzO3RdJLJn1o-3t9q7N-8h_a-C5nGACfHbnrAxCaSSqTfBRQcb_AKDxgE6MPDNPeii8A/exec"; // <-- pega tu URL real
 
-      // Aquí pega la URL de tu Apps Script WebApp
-      const url = "https://script.google.com/macros/s/AKfycbzzO3RdJLJn1o-3t9q7N-8h_a-C5nGACfHbnrAxCaSSqTfBRQcb_AKDxgE6MPDNPeii8A/exec";
-
+    try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre })
       });
 
+      if (!res.ok) {
+        throw new Error("Error HTTP: " + res.status);
+      }
+
       const data = await res.json();
-      alert("Nombre guardado: " + data.status);
+      alert("Respuesta del servidor: " + JSON.stringify(data));
+    } catch (err) {
+      alert("Error al enviar: " + err.message);
+      console.error(err);
     }
-  </script>
-</body>
-</html>
-
-
+  }
+</script>
