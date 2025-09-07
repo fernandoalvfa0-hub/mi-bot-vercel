@@ -1,38 +1,29 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Bot MVP con Airtable</title>
-</head>
-<body>
-  <h1>Hola 👋</h1>
-  <p>¿Cuál es tu nombre?</p>
-  <input id="nombre" type="text" placeholder="Escribe tu nombre aquí">
-  <button onclick="enviarNombre()">Enviar</button>
+<script>
+  async function enviarNombre() {
+    const nombre = document.getElementById("nombre").value;
+    if (!nombre) return alert("Por favor escribe tu nombre");
 
-  <script>
-    async function enviarNombre() {
-      const nombre = document.getElementById("nombre").value;
-      if (!nombre) return alert("Por favor escribe tu nombre");
+    const url = "https://api.airtable.com/v0/apptV3Z5H5EeDyOBJ/Nombres"; 
+    const apiKey = "patoLAphQqTibgprO.b927c42719f0c915788b64793aaddfe8c9973bcb2e10d01d9111faa1494d0e3a"; 
 
-      const url = "https://api.airtable.com/v0/apptV3Z5H5EeDyOBJ/Nombres";
-      const apiKey = "patoLAphQqTibgprO.b927c42719f0c915788b64793aaddfe8c9973bcb2e10d01d9111faa1494d0e3a"; 
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        fields: { Nombre: nombre }
+      })
+    });
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + apiKey,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          fields: { Nombre: nombre }
-        })
-      });
+    const data = await res.json();
+    console.log("Respuesta completa de Airtable:", data);
 
-      const data = await res.json();
-      console.log(data);
+    if (data.id) {
       alert("Guardado en Airtable con id: " + data.id);
+    } else {
+      alert("Error al guardar, revisa consola (F12)");
     }
-  </script>
-</body>
-</html>
+  }
+</script>
