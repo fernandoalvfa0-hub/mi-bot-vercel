@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Bot MVP</title>
+</head>
+<body>
+  <h1>Hola 👋</h1>
+  <p>¿Cuál es tu nombre?</p>
+  <input id="nombre" type="text" placeholder="Escribe tu nombre aquí">
+  <button onclick="enviarNombre()">Enviar</button>
+
+  <script>
+    async function enviarNombre() {
+      const nombre = document.getElementById("nombre").value;
+      if (!nombre) return alert("Por favor escribe tu nombre");
+
+      // Aquí pega la URL de tu Apps Script WebApp
+      const url = "TU_URL_DE_APPS_SCRIPT";
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre })
+      });
+
+      const data = await res.json();
+      alert("Nombre guardado: " + data.status);
+    }
+  </script>
+</body>
+</html>
